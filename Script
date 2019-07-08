@@ -1,0 +1,46 @@
+<script>
+let wrapper = jQuery('#tve_editor .thrv_wrapper:nth-child(3)').get(0).outerHTML;
+jQuery('#search-text').keypress(function(event){
+    var searchtext = jQuery('#search-text').val();
+    if (searchtext == '' ) {
+        jQuery('#tve_editor .thrv_wrapper:nth-child(3)').remove();
+        jQuery('#tve_editor').append(jQuery.parseHTML(wrapper));
+    }
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+        search();
+    }
+});
+jQuery('#search-keyword button').click(function(){search()});
+function search(){
+        var keywords = ['what is','original boat party','video','learn','boat','included', 'ticket', 'dj','buffet ','guest list night club','packages','when','start','boarding','return','late','catch','depart','westminster, waterloo or wmbankment','money','drinks','bars','wine','beer','spirits','boats','safe','wheelchair','accessible?','suitability','sea-sick','sick','medical emergency','weather','sun','rain','snow','fog','smoker','have a cigarette?','law','smoking','wear','leisure wear’','dress code','fancy dress','tunes','music','requests','exchanges','late','guestlist nightclub','party','stop','medical emergency','ladies','discount','£32','£31','one free ticket','table','area','reservations','unreserved','reserve','vegetarians','gluten','refund','cancel','non-refundable','flexible','notice','book','pay','email','bank transfer'];
+        var searchtext = jQuery('#search-text').val();
+        if (searchtext !== '') {
+            jQuery('#tve_editor .thrv_wrapper:nth-child(3)').remove();
+            jQuery('#tve_editor').append(jQuery.parseHTML(wrapper));
+
+            keywords.forEach(function(keyword) {
+                if (searchtext.toLowerCase().indexOf(keyword) != -1) {
+                    let regex = RegExp(keyword, 'gi');
+                    let postAreaContent = jQuery('#post-area');
+                    let postArea = postAreaContent.get(0).outerHTML.replace(regex,'<strong style="background-color: yellow;">$&</strong>');
+                    jQuery(postAreaContent).html(jQuery.parseHTML(postArea));
+    
+                    jQuery('#wpsm_accordion_519 .wpsm_panel.wpsm_panel-default').each(function(index, val){
+                        let accordionContent = jQuery(val);
+                        if (accordionContent.get(0).outerHTML.toLowerCase().indexOf(keyword) != -1) {
+                            accordionContent.find('.wpsm_panel-collapse').addClass('in').css('height', 'auto');
+                        }
+                        let accordion = accordionContent.get(0).outerHTML.replace(regex,'<strong style="background-color: yellow;">$&</strong>');
+                        jQuery(val).html(jQuery.parseHTML(accordion));
+                    });
+                }
+               
+            });
+        }
+}
+
+jQuery(document).ready(function(){
+    jQuery("img").removeAttr("title");
+});
+</script>
